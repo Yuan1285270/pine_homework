@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pi Network KYC驗證</title>
+    <style>
+        .content {
+            text-align: left;
+            max-width: 500px; /* Prevents text from spreading too far */
+            margin: 0 auto;  /* Keeps the entire block centered */
+            padding-left: 70px;
+        }
+        body {
+            background-color: #612F74;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+
+            background-color: rgba(220, 199, 255, 0.6);
+
+        }
+        .logo {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 24px;
+        }
+        p {
+            font-size: 16px;
+        }
+        .button {
+            background-color: #F2A900;
+            color: #612F74;
+            padding: 10px 20px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #FFC107;
+        }
+        .mining-animation {
+            width: 100px;
+            height: 100px;
+            margin: 20px auto;
+            position: relative;
+        }
+        .mining-pickaxe {
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            left: 50px;
+            top: 5px;
+            animation: mining 0.5s infinite alternate;
+        }
+        .mining-coin {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            left: 20px;
+            bottom: 10px;
+            animation: coin-hit 0.6s infinite alternate ease-in-out;
+
+        }
+
+        @keyframes mining {
+            0% { transform: rotate(-30deg); }
+            100% { transform: rotate(20deg); }
+        }
+        /* Pi 幣震動動畫 */
+        @keyframes coin-hit {
+            0% { transform: translateX(-1px); } /* 向左偏移 3px */
+            50% { transform: translateX(1px); } /* 向右偏移 3px */
+            100% { transform: translateX(-1px); } /* 回到左邊 */
+        }
+
+
+        /* 碎粒效果 */
+
+        .particle {
+            width: 4px;
+            height: 4px;
+            background-color: gold;
+            position: absolute;
+            border-radius: 50%;
+            opacity: 1;
+            animation: particle-fly 0.6s linear forwards;
+        }
+        .particle-container {
+            position: absolute;
+            left: 50%;
+            bottom: 60px; /* 這個數值根據你的 Pi 幣位置微調 */
+            transform: translateX(-50%);
+            width: 1px;  /* 防止瀏覽器把它視為空元素 */
+            height: 1px;
+            pointer-events: none;
+            overflow: visible;
+        }
+
+
+        /* 碎粒飛濺動畫 */
+        @keyframes particle-fly {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <img class="logo" src="Picoin.png" alt="Pi Network Logo">
+    <h1> Pi Network KYC 名額已滿 請耐心等待！</h1>
+    <div class = "content">
+        <p>目前已有<b><span id="migrated-count"> 8,000,000 </span></b> 名用戶成功申請KYC認證！！</p>
+        <p>你的排隊號碼：      <b><span id="queue-number"></span></b></p>
+        <p>目前等待人數：      <b><span id="people-ahead"></span> 人</b></p>
+        <p>等待時間約：        <b><span id="waiting-time"></span></b></p>
+        <p> <b>記得每天回來查看最新進度！</b></p>
+    </div>
+
+    <div class="mining-animation">
+        <img class="mining-pickaxe" src="pickaxe.png" alt="Pickaxe">
+        <img class="mining-coin" src="mine.png" alt="Pi Coin">
+        <div class="particle-container"></div>
+    </div>
+    <p>Keep mining, you are <b>NEXT!</b></p>
+    <button class="button" onclick="window.location.href='https://minepi.com/kyb-business-pi/'">
+        詳細資訊
+    </button>
+
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const miningPickaxe = document.querySelector(".mining-pickaxe");
+        const particleContainer = document.querySelector(".particle-container");
+
+        function createParticles() {
+            for (let i = 0; i < 10; i++) {
+                let particle = document.createElement("div");
+                particle.classList.add("particle");
+
+                // 隨機設定粒子的飛行方向
+                let angle = Math.random() * Math.PI * 2; // 0 ~ 360 度
+                let distance = Math.random() * 20 + 20; // 10~30px 的飛散距離
+                let x = Math.cos(angle) * distance + "px";
+                let y = Math.sin(angle) * distance + "px";
+
+                particle.style.setProperty("--x", x);
+                particle.style.setProperty("--y", y);
+
+                particleContainer.appendChild(particle);
+
+                // 移除粒子（動畫結束後）
+                setTimeout(() => {
+                    particle.remove();
+                }, 600);
+            }
+        }
+
+        // 每 0.6 秒觸發一次碎粒效果
+        setInterval(createParticles, 1000);
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+        const miningCoin = document.querySelector(".mining-coin");
+
+        function startAnimation() {
+            miningCoin.style.animation = "coin-hit 0.2s ease-in-out"; // 啟動動畫
+            setTimeout(() => {
+                miningCoin.style.animation = "none"; // 0.2 秒後停止動畫
+            }, 200);
+        }
+
+        // 每 2 秒執行一次震動
+        setInterval(startAnimation, 2000);
+    });
+    let startDate = new Date("2024-02-28");  // 模擬 Pi Network 公告後的開始時間
+    let initialMigrated = 8000000;  // 目前已成功遷移的用戶
+    let migrationSpeed = 200000;  // 每天遷移 20 萬人
+
+    function getUserQueueNumber() {
+        let userQueueNumber = localStorage.getItem("userQueueNumber");
+        if (!userQueueNumber) {
+            userQueueNumber = Math.floor(Math.random() * 4000000) + initialMigrated;  // 分配 8,000,000 ~ 12,000,000 之間的排隊號
+            localStorage.setItem("userQueueNumber", userQueueNumber);
+        }
+        return parseInt(userQueueNumber);
+    }
+
+    function updateQueueStatus() {
+        let currentDate = new Date();
+        let daysElapsed = Math.floor((currentDate - startDate) / (1000 * 60 * 60 * 24));  // 計算已過天數
+        let migratedCount = initialMigrated + (daysElapsed * migrationSpeed);  // 計算當前成功遷移人數
+        let userQueueNumber = getUserQueueNumber();
+        let peopleAhead = Math.max(20000, userQueueNumber - migratedCount);  // 計算還有多少人在用戶前面
+        let daysLeft = Math.ceil(peopleAhead / migrationSpeed+10);  // 預測還需要幾天
+
+        // 更新 HTML 顯示
+        document.getElementById("migrated-count").innerText = migratedCount.toLocaleString();
+        document.getElementById("queue-number").innerText = `#${userQueueNumber.toLocaleString()}`;
+        document.getElementById("people-ahead").innerText = peopleAhead.toLocaleString();
+        document.getElementById("waiting-time").innerText = `${daysLeft} 天 ${Math.floor(Math.random() * 24)} 小時`;
+    }
+
+    updateQueueStatus();
+    setInterval(updateQueueStatus, 86400000);
+</script>
+</body>
+</html>
+
